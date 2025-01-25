@@ -1,47 +1,29 @@
-version: 0.2
+workflows:
+  android-build:
+    name: Android build workflow
+    max_build_duration: 60 # 1 hour max duration per build (can be increased as needed)
+    environment:
+      flutter: stable # Optional, if you're using Flutter (remove if you're using pure Android)
+      java: corretto11 # JDK version (make sure it matches your Android project)
+      gradle: "6.x" # Gradle version
+      android: true # Enable Android environment
+      cache:
+        - ~/.gradle
+        - ~/.android
+    scripts:
+      # Install dependencies
+      - name: Install dependencies
+        script: |
+          echo "Installing dependencies..."
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-30"
+          
+      # Build APK
+      - name: Build APK
+        script: |
+          echo "Building APK..."
+          ./gradlew assembleRelease # Or assembleDebug for Debug APK
 
-# 阶段: 安装环境
-# 这里设置构建所需的工具和 SDK
-phases:
-  install:
-    # 安装指定版本的 Java（如 OpenJDK 11）
-    runtime-versions:
-      java: corretto11
-    commands:
-      # 安装 Android SDK 和构建工具
-      - echo "Installing Android SDK..."
-      - curl -o sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
-      - unzip sdk-tools.zip -d $HOME/android-sdk
-      - yes | $HOME/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/android-sdk "build-tools;30.0.3" "platforms;android-30"
-      - echo "Android SDK installed successfully."
-
-  pre_build:
-    commands:
-      - echo "Preparing for build..."
-
-  build:
-    # 执行 Gradle 构建命令
-    commands:
-      - echo "Building APK..."
-      - chmod +x ./gradlew
-      - ./gradlew assembleRelease  # 生成 Release APK
-      # 或者如果需要构建 Debug 版本，使用 assembleDebug：
-      # - ./gradlew assembleDebug
-
-  post_build:
-    commands:
-      - echo "Build completed."
-
-# 输出构建产物（APK文件）
-artifacts:
-  files:
-    - app/build/outputs/apk/release/*.apk  # 输出 Release APK 文件
-    - app/build/outputs/apk/debug/*.apk    # 如果需要调试版 APK
-  discard-paths: no  # 保留文件路径结构
-
-# 可选：设置测试步骤
-# 如果需要在构建后执行测试，可以添加如下测试阶段：
-# test:
-#   commands:
-#     - echo "Running tests..."
-#     - ./gradlew test
+    artifacts:
+      - app/build/outputs/apk/release/*.apk  # Path to Release APK
+      - app/build/outputs/apk/debug/*.apk    # Path to Debug APK (optional)
