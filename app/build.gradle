@@ -6,6 +6,9 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
+    appOptions {
+        cruncherEnabled = false
+    }
     defaultConfig {
         applicationId "com.ami.amiweb"
         minSdkVersion 15
