@@ -3,10 +3,10 @@ name: Build APK
 on:
   push:
     branches:
-      - main  # 触发构建的分支，可以根据需要修改
+      - master  # 触发构建的分支，可以根据需要修改
   pull_request:
     branches:
-      - main  # 可以根据需要修改触发条件
+      - master  # 可以根据需要修改触发条件
 
 jobs:
   build:
