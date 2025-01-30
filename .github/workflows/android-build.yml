@@ -39,8 +39,8 @@ jobs:
         run: chmod +x ./gradlew
 
       # Clean APK
-      #- name: Clean APK
-      #  run: ./gradlew clean
+      - name: Clean APK
+        run: ./gradlew clean
         
       # 构建 APK
       - name: Build APK
@@ -52,3 +52,6 @@ jobs:
         with:
           name: apk
           path: app/build/outputs/apk/release/app-release.apk  # 适配你的项目路径
+      - name: List APK files
+        run: |
+          ls -R app/build/outputs/apk/
