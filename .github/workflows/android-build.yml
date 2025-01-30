@@ -38,6 +38,10 @@ jobs:
       - name: Grant execute permission to gradlew
         run: chmod +x ./gradlew
 
+      # Clean APK
+      - name: Clean APK
+        run: ./gradlew clean
+        
       # 构建 APK
       - name: Build APK
         run: ./gradlew assembleRelease  # 或者 assembleDebug，根据需要
