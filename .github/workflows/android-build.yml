@@ -39,8 +39,8 @@ jobs:
         run: chmod +x ./gradlew
 
       # Clean APK
-      - name: Clean APK
-        run: ./gradlew clean
+      #- name: Clean APK
+      #  run: ./gradlew clean
         
       # 构建 APK
       - name: Build APK
