@@ -44,7 +44,7 @@ jobs:
         
       # 构建 APK
       - name: Build APK
-        run: ./gradlew assembleRelease  # 或者 assembleDebug，根据需要
+        run: ./gradlew assembleRelease -PskipSign  # 或者 assembleDebug，根据需要
 
       # 上传构建生成的 APK 文件作为构建结果
       - name: Upload APK
