@@ -46,6 +46,21 @@ jobs:
       - name: Build APK
         run: ./gradlew assembleRelease -PskipSign  # 或者 assembleDebug，根据需要
 
+      # 解析 GitHub Secrets 并解码 Keystore
+      - name: Decode Keystore
+        run: echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > my-release-key.jks
+
+      # 签名 APK
+      - name: Sign APK
+        run: |
+          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 \
+          -keystore my-release-key.jks \
+          -storepass ${{ secrets.KEYSTORE_PASSWORD }} \
+          -keypass ${{ secrets.KEY_PASSWORD }} \
+          -signedjar app/build/outputs/apk/release/app-release-signed.apk \
+          app/build/outputs/apk/release/app-release.apk \
+          ${{ secrets.KEY_ALIAS }}
+
       # 上传构建生成的 APK 文件作为构建结果
       - name: Upload APK
         uses: actions/upload-artifact@v3
