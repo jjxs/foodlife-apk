@@ -45,7 +45,7 @@ jobs:
       # 构建 APK
       - name: Build APK
         run: ./gradlew assembleRelease -PskipSign  # 或者 assembleDebug，根据需要
-             ls -lh app/build/outputs/apk/release/ 或者 
+             ls -lh app/build/outputs/apk/release/ # 或者 
 
       # 解析 GitHub Secrets 并解码 Keystore
       - name: Decode Keystore
