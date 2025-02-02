@@ -48,7 +48,7 @@ jobs:
         
       # 构建 APK
       - name: Build APK
-        run: ./gradlew assembleRelease  # 或者 assembleDebug，根据需要
+        run: ./gradlew assembleRelease -PskipSign # 或者 assembleDebug，根据需要
      
       # 确保 Keystore 文件存在
       - name: Check Keystore File
