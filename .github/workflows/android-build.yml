@@ -53,20 +53,20 @@ jobs:
       - name: Build APK
         run: ./gradlew assembleRelease  # 或者 -PskipSign assembleDebug，根据需要
      
-      # 确保 Keystore 文件存在
-      - name: Check Keystore File
-        run: ls -lh my-release-key.jks
+      # # 确保 Keystore 文件存在
+      # - name: Check Keystore File
+      #   run: ls -lh my-release-key.jks
         
       # 签名 APK
-      - name: Sign APK
-        run: |
-          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 \
-          -keystore my-release-key.jks \
-          -storepass ${{ secrets.KEYSTORE_PASSWORD }} \
-          -keypass ${{ secrets.KEY_PASSWORD }} \
-          -signedjar app/build/outputs/apk/release/app-release-signed.apk \
-          app/build/outputs/apk/release/app-release.apk \
-          ${{ secrets.KEY_ALIAS }}
+      # - name: Sign APK
+      #   run: |
+      #     jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 \
+      #     -keystore my-release-key.jks \
+      #     -storepass ${{ secrets.KEYSTORE_PASSWORD }} \
+      #     -keypass ${{ secrets.KEY_PASSWORD }} \
+      #     -signedjar app/build/outputs/apk/release/app-release-signed.apk \
+      #     app/build/outputs/apk/release/app-release.apk \
+      #     ${{ secrets.KEY_ALIAS }}
 
       # 上传构建生成的 APK 文件作为构建结果
       - name: Upload APK
@@ -74,6 +74,6 @@ jobs:
         with:
           name: apk
           path: app/build/outputs/apk/release/app-release.apk  # 适配你的项目路径
-      - name: List APK files
-        run: |
-          ls -R app/build/outputs/apk/
+      # - name: List APK files
+      #   run: |
+      #     ls -R app/build/outputs/apk/
