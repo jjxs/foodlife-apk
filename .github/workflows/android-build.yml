@@ -40,6 +40,14 @@ jobs:
       # 解析 GitHub Secrets 并解码 Keystore
       - name: Decode Keystore
         run: echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > my-release-key.jks
+
+      - name: Create key.properties file
+        run: |
+          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" > key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> key.properties
+          echo "storeFile=app/my-release-key.jks" >> key.properties
+
         
       # 给予 gradlew 执行权限
       - name: Grant execute permission to gradlew
@@ -68,6 +76,10 @@ jobs:
       #     app/build/outputs/apk/release/app-release.apk \
       #     ${{ secrets.KEY_ALIAS }}
 
+      # 列出构建输出目录，便于检查 APK 是否生成
+      - name: List APK files
+        run: ls -R app/build/outputs/apk/release/
+        
       # 上传构建生成的 APK 文件作为构建结果
       - name: Upload APK
         uses: actions/upload-artifact@v4
