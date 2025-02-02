@@ -51,7 +51,7 @@ class FullscreenActivity : AppCompatActivity() {
 
 //    private var base_uri = "http://hexiangu.food-life.co.jp/"
 
-    private var base_uri = "http://app.new-food-life.co.jp/"
+    private var base_uri = "http://app.new-food-life.shop/"
 
     private var charset = "GBK"
 
