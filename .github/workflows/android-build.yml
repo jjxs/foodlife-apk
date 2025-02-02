@@ -33,7 +33,11 @@ jobs:
           unzip commandlinetools-linux-7583922_latest.zip -d $HOME/android-sdk-linux
           echo "y" | $HOME/android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/android-sdk-linux --update
           echo "y" | $HOME/android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/android-sdk-linux "platform-tools" "build-tools;30.0.3" "platforms;android-30"
-
+      
+      # 解析 GitHub Secrets 并解码 Keystore
+      - name: Decode Keystore
+        run: echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > my-release-key.jks
+        
       # 给予 gradlew 执行权限
       - name: Grant execute permission to gradlew
         run: chmod +x ./gradlew
@@ -44,11 +48,7 @@ jobs:
         
       # 构建 APK
       - name: Build APK
-        run: ./gradlew assembleRelease -PskipSign  # 或者 assembleDebug，根据需要
-        
-      # 解析 GitHub Secrets 并解码 Keystore
-      - name: Decode Keystore
-        run: echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > my-release-key.jks
+        run: ./gradlew assembleRelease  # 或者 assembleDebug，根据需要
      
       # 确保 Keystore 文件存在
       - name: Check Keystore File
