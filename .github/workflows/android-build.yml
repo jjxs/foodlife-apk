@@ -33,6 +33,9 @@ jobs:
           unzip commandlinetools-linux-7583922_latest.zip -d $HOME/android-sdk-linux
           echo "y" | $HOME/android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/android-sdk-linux --update
           echo "y" | $HOME/android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/android-sdk-linux "platform-tools" "build-tools;30.0.3" "platforms;android-30"
+
+      - name: Set Android SDK environment variable
+        run: echo "ANDROID_HOME=$HOME/android-sdk-linux" >> $GITHUB_ENV
       
       # 解析 GitHub Secrets 并解码 Keystore
       - name: Decode Keystore
@@ -48,7 +51,7 @@ jobs:
         
       # 构建 APK
       - name: Build APK
-        run: ./gradlew assembleRelease -PskipSign # 或者 assembleDebug，根据需要
+        run: ./gradlew assembleRelease  # 或者 -PskipSign assembleDebug，根据需要
      
       # 确保 Keystore 文件存在
       - name: Check Keystore File
