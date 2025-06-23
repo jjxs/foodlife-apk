@@ -53,7 +53,6 @@ class FullscreenActivity : AppCompatActivity() {
 
     private var base_uri = "http://app.ymtx.co.jp/"
 
-
     private var charset = "GBK"
 
     private lateinit var bluetoothDevice: BluetoothDevice;
@@ -98,7 +97,9 @@ class FullscreenActivity : AppCompatActivity() {
         mediaplayer.setDataSource(base_uri + "/assets/audio/kitchen.mp3");
         mediaplayer.prepare()
         web_view.addJavascriptInterface(this, "amiJs")
-  // Get the tings
+
+        // Get the web view settings instance
+        val settings = web_view.settings
 
         // Enable java script in web view
         settings.javaScriptEnabled = true
@@ -171,7 +172,45 @@ class FullscreenActivity : AppCompatActivity() {
 
     @JavascriptInterface
     fun getMac(): String{
-         tItnsarday_print(data: String){
+        val manager = getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val info = manager.connectionInfo
+        Log.v("test", info.macAddress.toUpperCase())
+//        return info.macAddress.toUpperCase()
+
+
+        try {
+            val all: List<NetworkInterface> =
+                Collections.list(NetworkInterface.getNetworkInterfaces())
+            for (nif in all) {
+                if (!(nif.getName() as java.lang.String).equalsIgnoreCase("wlan0")) continue
+                val macBytes: ByteArray = nif.getHardwareAddress() ?: return ""
+                val res1 = StringBuilder()
+                for (b in macBytes) {
+                    res1.append(Integer.toHexString(b.toInt()) + ":")
+                }
+                if (res1.length > 0) {
+                    res1.deleteCharAt(res1.length - 1)
+                }
+                return res1.toString().replace("ffffff", "").toUpperCase()
+            }
+        } catch (ex: java.lang.Exception) {
+            //handle exception
+        }
+        return "02:00:00:00:00:00"
+    }
+
+    @JavascriptInterface
+    fun open_cash_box() {
+        var device = getBluetoothDevice()
+        if (device != null) {
+            printMsg(device, "", 3)
+        } else {
+            Log.v("test", "device not found")
+        }
+    }
+
+    @JavascriptInterface
+    fun accounting_day_print(data: String){
 
         var device = getBluetoothDevice()
         Log.v("test", data)
