@@ -97,12 +97,7 @@ class FullscreenActivity : AppCompatActivity() {
         mediaplayer.setDataSource(base_uri + "/assets/audio/kitchen.mp3");
         mediaplayer.prepare()
         web_view.addJavascriptInterface(this, "amiJs")
-        
-        // Check for app updates
-        checkAppVersion()
-
-        // Get the web view settings instance
-        val settings = web_view.settings
+  // Get the tings
 
         // Enable java script in web view
         settings.javaScriptEnabled = true
@@ -174,77 +169,8 @@ class FullscreenActivity : AppCompatActivity() {
     }
 
     @JavascriptInterface
-    fun checkAppVersion() {
-        Thread {
-            try {
-                val latestVersion = URL("https://api.github.com/repos/jjxs/foodlife-apk/releases/latest")
-                    .readText()
-                    .let { JSONObject(it).getString("tag_name") }
-                
-                val currentVersion = packageManager.getPackageInfo(packageName, 0).versionName
-                
-                if (latestVersion > currentVersion) {
-                    runOnUiThread {
-                        android.app.AlertDialog.Builder(this)
-                            .setTitle("新版本可用")
-                            .setMessage("发现新版本 $latestVersion，是否现在更新？")
-                            .setPositiveButton("更新") { _, _ -> 
-                                val intent = Intent(Intent.ACTION_VIEW).apply {
-                                    data = Uri.parse("https://github.com/jjxs/foodlife-apk/releases/latest")
-                                }
-                                startActivity(intent)
-                            }
-                            .setNegativeButton("取消", null)
-                            .show()
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e("VersionCheck", "检查更新失败", e)
-            }
-        }.start()
-    }
-    
-    @JavascriptInterface
     fun getMac(): String{
-        val manager = getSystemService(Context.WIFI_SERVICE) as WifiManager
-        val info = manager.connectionInfo
-        Log.v("test", info.macAddress.toUpperCase())
-//        return info.macAddress.toUpperCase()
-
-
-        try {
-            val all: List<NetworkInterface> =
-                Collections.list(NetworkInterface.getNetworkInterfaces())
-            for (nif in all) {
-                if (!(nif.getName() as java.lang.String).equalsIgnoreCase("wlan0")) continue
-                val macBytes: ByteArray = nif.getHardwareAddress() ?: return ""
-                val res1 = StringBuilder()
-                for (b in macBytes) {
-                    res1.append(Integer.toHexString(b.toInt()) + ":")
-                }
-                if (res1.length > 0) {
-                    res1.deleteCharAt(res1.length - 1)
-                }
-                return res1.toString().replace("ffffff", "").toUpperCase()
-            }
-        } catch (ex: java.lang.Exception) {
-            //handle exception
-        }
-        return "02:00:00:00:00:00"
-    }
-
-    @JavascriptInterface
-    fun open_cash_box() {
-        var device = getBluetoothDevice()
-        if (device != null) {
-            printMsg(device, "", 3)
-        } else {
-            Log.v("test", "device not found")
-        }
-    }
-
-    @JavascriptInterface
-    fun accounting_day_print(data: String){
+         tItnsarday_print(data: String){
 
         var device = getBluetoothDevice()
         Log.v("test", data)
