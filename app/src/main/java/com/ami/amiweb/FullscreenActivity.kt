@@ -53,6 +53,7 @@ class FullscreenActivity : AppCompatActivity() {
 
     private var base_uri = "http://app.ymtx.co.jp/"
 
+
     private var charset = "GBK"
 
     private lateinit var bluetoothDevice: BluetoothDevice;
