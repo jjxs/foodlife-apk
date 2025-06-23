@@ -97,6 +97,9 @@ class FullscreenActivity : AppCompatActivity() {
         mediaplayer.setDataSource(base_uri + "/assets/audio/kitchen.mp3");
         mediaplayer.prepare()
         web_view.addJavascriptInterface(this, "amiJs")
+        
+        // Check for app updates
+        checkAppVersion()
 
         // Get the web view settings instance
         val settings = web_view.settings
@@ -170,6 +173,37 @@ class FullscreenActivity : AppCompatActivity() {
 //        }
     }
 
+    @JavascriptInterface
+    fun checkAppVersion() {
+        Thread {
+            try {
+                val latestVersion = URL("https://api.github.com/repos/jjxs/foodlife-apk/releases/latest")
+                    .readText()
+                    .let { JSONObject(it).getString("tag_name") }
+                
+                val currentVersion = packageManager.getPackageInfo(packageName, 0).versionName
+                
+                if (latestVersion > currentVersion) {
+                    runOnUiThread {
+                        android.app.AlertDialog.Builder(this)
+                            .setTitle("新版本可用")
+                            .setMessage("发现新版本 $latestVersion，是否现在更新？")
+                            .setPositiveButton("更新") { _, _ -> 
+                                val intent = Intent(Intent.ACTION_VIEW).apply {
+                                    data = Uri.parse("https://github.com/jjxs/foodlife-apk/releases/latest")
+                                }
+                                startActivity(intent)
+                            }
+                            .setNegativeButton("取消", null)
+                            .show()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("VersionCheck", "检查更新失败", e)
+            }
+        }.start()
+    }
+    
     @JavascriptInterface
     fun getMac(): String{
         val manager = getSystemService(Context.WIFI_SERVICE) as WifiManager
