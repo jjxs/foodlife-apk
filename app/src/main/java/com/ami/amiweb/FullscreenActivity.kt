@@ -51,7 +51,9 @@ class FullscreenActivity : AppCompatActivity() {
 
 //    private var base_uri = "http://hexiangu.food-life.co.jp/"
 
-    private var base_uri = "http://app.ymtx.co.jp/"
+    private var base_uri = "https://app.ymtxplus.com/"
+
+ 
 
     private var charset = "GBK"
 
